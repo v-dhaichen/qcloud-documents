@@ -1,5 +1,8 @@
 ## 功能描述
-Upload Part - Copy 请求实现将一个文件的分块内容从源路径复制到目标路径。通过指定 x-cos-copy-source 来指定源文件，x-cos-copy-source-range 指定字节范围。允许分块的大小为 5 MB - 5 GB
+Upload Part - Copy 请求实现将一个文件的分块内容从源路径复制到目标路径。通过指定 x-cos-copy-source 来指定源文件，x-cos-copy-source-range 指定字节范围（允许分块的大小为 5 MB - 5 GB）。
+
+### 版本
+如果您的存储桶启用了版本控制，则可以拥有同一对象的多个版本。默认情况下，x-cos-copy-source 标识需要复制的对象的当前版本。如果当前版本是删除标记，并且您未在其中指定版本标识 x-cos-copy-source，则对象存储会返回 404 错误，因为该对象不存在。如果您在x-cos-copy-sourceand 中指定 versionId 且 versionId 是删除标记，则对象存储会返回 HTTP 400 错误，因为您不允许指定删除标记作为其版本 x-cos-copy-source。
 
 ## 请求
 #### 请求语法示例
@@ -76,24 +79,21 @@ uploadId|string|是|使用上传分块文件，必须先初始化分块上传。
 #### 非公共头部
 
 
-名称|类型|必选|描述
----|---|---|---
-x-cos-copy-source|string|是|源文件 URL 路径，可以通过 versionid 子资源指定历史版本
-x-cos-copy-source-range|string|否|源文件的字节范围，范围值必须使用 bytes=first-last 格式，first 和 last 都是基于 0 开始的偏移量
-x-cos-copy-source-If-Modified-Since|string|否|当 Object 在指定时间后被修改，则执行操作，否则返回 412。可与 x-cos-copy-source-If-None-Match 一起使用，与其他条件联合使用返回冲突
-x-cos-copy-source-If-Unmodified-Since|string|否|当 Object 在指定时间后未被修改，则执行操作，否则返回 412。可与 x-cos-copy-source-If-Match 一起使用，与其他条件联合使用返回冲突
-x-cos-copy-source-If-Match|string|否|当 Object 的 Etag 和给定一致时，则执行操作，否则返回 412。可与 x-cos-copy-source-If-Unmodified-Since 一起使用，与其他条件联合使用返回冲突
-x-cos-copy-source-If-None-Match|string|否|当 Object 的 Etag 和给定不一致时，则执行操作，否则返回 412。可与 x-cos-copy-source-If-Modified-Since 一起使用，与其他条件联合使用返回冲突
-x-cos-storage-class|string|否|设置 Object 的存储级别，枚举值：STANDARD，STANDARD_IA，NEARLINE，默认值：STANDARD
-x-cos-acl|string|否|定义 Object 的 ACL 属性。有效值：private，public-read-write，public-read；默认值：private
-x-cos-grant-read|string|否|赋予被授权者读的权限。格式：x-cos-grant-read: id=" ",id=" "；<br>当需要给子账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/<SubUin>"，<br>当需要给根账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/\<OwnerUin>"
-x-cos-grant-write|string|否|赋予被授权者读的权限。格式：x-cos-grant-write: id=" ",id=" "；<br>当需要给子账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/<SubUin>"，<br>当需要给根账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/\<OwnerUin>"
-x-cos-grant-full-control|string|否|赋予被授权者读的权限。格式：x-cos-grant-full-control: id=" ",id=" "；<br>当需要给子账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/<SubUin>"，<br>当需要给根账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/\<OwnerUin>"
+|名称|描述|类型|必选|
+|---|---|---|---|
+|x-cos-copy-source|源文件 URL 路径，可以通过 versionid 子资源指定历史版本|string|是|
+|x-cos-copy-source-range|源文件的字节范围，范围值必须使用 bytes=first-last 格式，first 和 last 都是基于 0 开始的偏移量。例如 bytes=0-9 表示你希望拷贝源文件的开头 10 个字节的数据 ， 如果不指定，则表示拷贝整个文件。|string|否|
+|x-cos-copy-source-If-Modified-Since|当 Object 在指定时间后被修改，则执行操作，否则返回 412。可与 x-cos-copy-source-If-None-Match 一起使用，与其他条件联合使用返回冲突|string|否|
+|x-cos-copy-source-If-Unmodified-Since|当 Object 在指定时间后未被修改，则执行操作，否则返回 412。可与 x-cos-copy-source-If-Match 一起使用，与其他条件联合使用返回冲突|string|否|
+|x-cos-copy-source-If-Match|当 Object 的 Etag 和给定一致时，则执行操作，否则返回 412。可与 x-cos-copy-source-If-Unmodified-Since 一起使用，与其他条件联合使用返回冲突|string|否|
+|x-cos-copy-source-If-None-Match|当 Object 的 Etag 和给定不一致时，则执行操作，否则返回 412。可与 x-cos-copy-source-If-Modified-Since 一起使用，与其他条件联合使用返回冲突|string|否|
+|x-cos-storage-class|设置 Object 的存储级别，枚举值：STANDARD，STANDARD_IA，ARCHIVE，默认值：STANDARD|string|否|
+|x-cos-acl|定义 Object 的 ACL 属性。有效值：private，public-read-write，public-read；默认值：private|string|否|
+|x-cos-grant-read|赋予被授权者读的权限。格式：x-cos-grant-read: id=" ",id=" "；<br>当需要给子账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/<SubUin>"，<br>当需要给根账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/\<OwnerUin>"|string|否|
+|x-cos-grant-write|赋予被授权者读的权限。格式：x-cos-grant-write: id=" ",id=" "；<br>当需要给子账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/<SubUin>"，<br>当需要给根账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/\<OwnerUin>"|string|否|
+|x-cos-grant-full-control|赋予被授权者读的权限。格式：x-cos-grant-full-control: id=" ",id=" "；<br>当需要给子账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/<SubUin>"，<br>当需要给根账户授权时，id="qcs::cam::uin/\<OwnerUin>:uin/\<OwnerUin>"|string|否|
 
 
-##### x-cos-copy-source-range
-源文件的字节范围，范围值必须使用 bytes=first-last 格式，first 和 last 都是基于 0 开始的偏移量。
-例如 bytes=0-9 表示你希望拷贝源文件的开头 10 个字节的数据 ， 如果不指定，则表示拷贝整个文件。
 ### 请求体
 该请求请求体为空。
 ## 响应
