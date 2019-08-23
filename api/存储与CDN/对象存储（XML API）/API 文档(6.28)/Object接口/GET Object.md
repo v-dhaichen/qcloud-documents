@@ -6,7 +6,7 @@ GET Object 接口请求可以将 COS 存储桶中的对象（Object）下载至�
 
 #### 版本控制
 
-当启用版本控制时，该 GET 操作返回对象的最新版本。要返回对象的历史版本，请使用 versionId 请求参数。
+当启用版本控制时，该 GET 操作可以使用 versionId 请求参数指定要返回的版本 ID，此时将返回对象的指定版本，如指定版本为删除标记则返回 HTTP 响应码404（Not Found），否则将返回指定对象的最新版本。
 
 ## 请求
 
@@ -31,7 +31,7 @@ Authorization: Auth String
 | response-content-language | 设置响应中的 Content-Language 头部的值 | string | 否 |
 | response-content-type | 设置响应中的 Content-Type 头部的值 | string | 否 |
 | response-expires | 设置响应中的 Expires 头部的值 | string | 否 |
-| versionId | 当启用版本控制时，指定要下载的对象的版本 ID，若不指定则下载对象的最新版本 | string | 否 |
+| versionId | 当启用版本控制时，指定要下载的版本 ID，如不指定则下载对象的最新版本 | string | 否 |
 
 #### 请求头
 
@@ -39,7 +39,7 @@ Authorization: Auth String
 
 | 名称 | 描述 | 类型 | 是否必选 |
 | --- | --- | --- | --- |
-| Range | RFC 2616 中定义的字节范围，范围值必须使用 bytes=first-last 格式，first 和 last 都是基于0开始的偏移量。例如 bytes=0-9，表示下载对象的开头10个字节的数据，此时返回 HTTP 状态码206（Partial Content）及 Content-Range 响应头部。如果不指定，则表示下载整个对象 | string | 否 |
+| Range | RFC 2616 中定义的字节范围，范围值必须使用 bytes=first-last 格式，first 和 last 都是基于0开始的偏移量。例如 bytes=0-9，表示下载对象的开头10个字节的数据，此时返回 HTTP 状态码 206（Partial Content）及 Content-Range 响应头部。如果不指定，则表示下载整个对象 | string | 否 |
 | If-Modified-Since | 当对象在指定时间后被修改，则返回对象，否则返回 HTTP 状态码为304（Not Modified） | string | 否 |
 | If-Unmodified-Since | 当对象在指定时间后未被修改，则返回对象，否则返回 HTTP 状态码为412（Precondition Failed） | string | 否 |
 | If-Match | 当对象的 ETag 与指定的值一致，则返回对象，否则返回 HTTP 状态码为412（Precondition Failed） | string | 否 |
@@ -47,7 +47,7 @@ Authorization: Auth String
 
 **服务端加密相关头部**
 
-如果指定的对象使用了服务端加密且加密方式为 SSE-C 时，则需要指定服务端加密的相关头部来解密对象，请参见 [服务端加密专用头部](https://cloud.tencent.com/document/product/436/7728#.E6.9C.8D.E5.8A.A1.E7.AB.AF.E5.8A.A0.E5.AF.86.E4.B8.93.E7.94.A8.E5.A4.B4.E9.83.A8)。
+如果指定的对象使用了服务端加密且加密方式为 SSE-C 时，则需要指定服务端加密的相关头部来解密对象，请参见 [服务端加密专用头部](https://cloud.tencent.com/document/product/436/7728#.E6.9C.8D.E5.8A.A1.E7.AB.AF.E5.8A.A0.E5.AF.86.E4.B8.93.E7.94.A8.E5.A4.B4.E9.83.A8)
 
 #### 请求体
 
@@ -67,7 +67,7 @@ Authorization: Auth String
 | Content-Range | RFC 2616 中定义的返回内容的字节范围，仅当请求中指定了 Range 请求头部时才会返回该头部 | string |
 | Expires | RFC 2616 中定义的缓存失效时间，仅当对象元数据包含此项或通过请求参数指定了此项时才会返回该头部 | string |
 | x-cos-meta-\* | 包括用户自定义元数据头部后缀和用户自定义元数据信息 | string |
-| x-cos-storage-class | 对象存储类型。枚举值请参见 [存储类型](https://cloud.tencent.com/document/product/436/33417) 文档，例如 STANDARD_IA，ARCHIVE。仅当对象不是标准存储（STANDARD）时才会返回该头部 | Enum |
+| x-cos-storage-class | 对象存储类型。枚举值请参见 [存储类型](https://cloud.tencent.com/document/product/436/33417) 文档，如：STANDARD_IA，ARCHIVE。仅当对象不是标准存储（STANDARD）时才会返回该头部 | Enum |
 
 **版本控制相关头部**
 
@@ -79,7 +79,7 @@ Authorization: Auth String
 
 **服务端加密相关头部**
 
-如果指定的对象使用了服务端加密，则此接口将返回服务端加密专用头部，请参见 [服务端加密专用头部](https://cloud.tencent.com/document/product/436/7729#.E6.9C.8D.E5.8A.A1.E7.AB.AF.E5.8A.A0.E5.AF.86.E4.B8.93.E7.94.A8.E5.A4.B4.E9.83.A8)。
+如果指定的对象使用了服务端加密，则此接口将返回服务端加密专用头部，请参见 [服务端加密专用头部](https://cloud.tencent.com/document/product/436/7729#.E6.9C.8D.E5.8A.A1.E7.AB.AF.E5.8A.A0.E5.AF.86.E4.B8.93.E7.94.A8.E5.A4.B4.E9.83.A8)
 
 #### 响应体
 
@@ -215,7 +215,7 @@ x-cos-server-side-encryption-customer-key-MD5: U5L61r7jcwdNvT7frmUG8g==
 [Object Content]
 ```
 
-#### 案例五：下载对象最新版本（启用版本控制）
+#### 案例五：使用版本控制，下载对象最新版本
 
 #### 请求
 
@@ -245,7 +245,7 @@ x-cos-version-id: MTg0NDUxODE3NzYyODMxOTg0OTg
 [Object Content]
 ```
 
-#### 案例六：下载对象指定版本（启用版本控制）
+#### 案例六：使用版本控制，下载对象指定版本
 
 #### 请求
 
