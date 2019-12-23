@@ -65,10 +65,12 @@ Content-Length: Content Length
 
 | 名称 | 描述 | 类型 | 是否必选 |
 | --- | --- | --- | --- |
-| x-cos-server-side-encryption | 服务端加密算法，目前仅支持 AES256 | string | 使用 SSE-COS 时，此字段为必选项 |
-| x-cos-server-side-encryption-customer-algorithm | 服务端加密算法，目前仅支持 AES256 | string | 使用 SSE-C 时，此字段为必选项 |
-| x-cos-server-side-encryption-customer-key | 服务端加密密钥的 Base64 编码<br>例如`MDEyMzQ1Njc4OUFCQ0RFRjAxMjM0NTY3ODlBQkNERUY=` | string | 使用 SSE-C 时，此字段为必选项 |
-| x-cos-server-side-encryption-customer-key-MD5 | 服务端加密密钥的 MD5 哈希值，使用 Base64 编码<br>例如`U5L61r7jcwdNvT7frmUG8g==` | string | 使用 SSE-C 时，此字段为必选项 |
+| x-cos-server-side-encryption | 服务端加密算法，支持 AES256、cos/kms | string | 使用 SSE-COS 时，此字段为必选项 |
+| x-cos-server-side-encryption-customer-algorithm | 服务端加密算法，支持 AES256、cos/kms | string | 使用 SSE-C 时，此字段为必选项 |
+| x-cos-server-side-encryption-cos-kms-key-id | 当x-cos-server-side-encryption值为cos/kms时，用于指定kms的用户主密钥CMK，如不指定则使用COS默认创建的CMK。 | string | 非必选 |
+| x-cos-server-side-encryption-context | 当x-cos-server-side-encryption值为cos/kms时，用于指定加密上下文，值为base64编码的UTF-8字符串，其中包含带有加密上下文键值对的JSON。 | string | 非必选 |
+| x-cos-server-side-encryption-customer-key | 服务端加密密钥的 Base64 编码<br/>例如`MDEyMzQ1Njc4OUFCQ0RFRjAxMjM0NTY3ODlBQkNERUY=` | string | 使用 SSE-C 时，此字段为必选项 |
+| x-cos-server-side-encryption-customer-key-MD5 | 服务端加密密钥的 MD5 哈希值，使用 Base64 编码<br/>例如`U5L61r7jcwdNvT7frmUG8g==` | string | 使用 SSE-C 时，此字段为必选项 |
 
 <span id="id1"></span>
 **签名保护**
