@@ -59,7 +59,11 @@ x-cos-appid: <APPID>
         </Spec>
     </Manifest>
     <Operation>
-        <COSPutObjectCopy>
+        <COSInitiateRestoreObject>    ##批量归档恢复
+            <ExpirationInDays> integer </ExpirationInDays>
+            <JobTier> string </JobTier>
+        </COSInitiateRestoreObject>
+        <COSPutObjectCopy>            ##批量数据复制
             <AccessControlGrants>
                 <COSGrant>
                     <Grantee>
@@ -124,7 +128,7 @@ x-cos-appid: <APPID>
 | ConfirmationRequired | CreateJobRequest | 是否在执行任务前进行确认。缺省项为 false。                   | Boolean          | 否       |
 | Description          | CreateJobRequest | 任务描述。若您在创建任务时配置了此信息，则会返回该项内容。描述长度范围为0 - 256字节。 | String           | 否       |
 | Manifest             | CreateJobRequest | 待处理的对象清单。您需要将需要处理的对象记录在此对象清单内。 | Manifest Object  | 是       |
-| Operation            | CreateJobRequest | 您需要对清单内的对象批量执行的操作。目前 COS 支持的操作为`PUT Object-Copy`操作，您可以据此批量复制桶内的存量数据。 | Operation Object | 是       |
+| Operation            | CreateJobRequest | 您需要对清单内的对象批量执行的操作。目前 COS 支持`批量数据复制` `批量归档恢复`，您可以据此处理桶内的存量数据。 | Operation Object | 是       |
 | Priority             | CreateJobRequest | 任务优先级。越高的数值代表此项任务的优先级越高。优先级数值范围为0 - 2147483647。 | Integer          | 是       |
 | Report               | CreateJobRequest | 任务完成报告。您可配置此参数以在任务完成时输出报告，方便审计任务执行状况。 | Report Object    | 是       |
 | RoleArn              | CreateJobRequest | COS 资源标识符，此处用于标识您创建的角色。您需要此资源标识符以验证您的身份。 | String           | 是       |
@@ -199,7 +203,7 @@ Connection: close
 	</Manifest>
 	<Operation>
 		<COSPutObjectCopy>
-			<TargetResource>qcs::cos:ap-chengdu::destinationbucket-1250000000</TargetResource>
+			<TargetResource>qcs::cos:ap-chengdu:uid/1250000000:destinationbucket-1250000000</TargetResource>
 		</COSPutObjectCopy>
 	</Operation>
 	<Priority>10</Priority>
