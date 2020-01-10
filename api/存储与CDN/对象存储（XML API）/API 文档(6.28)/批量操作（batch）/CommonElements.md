@@ -96,8 +96,8 @@
 
 ## ProgressSummary
 
-| 节点名                 | 父节点          | 描述               | 类型    |是否必选    |
-| ---------------------- | --------------- | ------------------ | ------- |------- |
-| NumberOfTasksFailed    | ProgressSummary | 当前失败的操作数。 | Integer |是    |
-| NumberOfTasksSucceeded | ProgressSummary | 当前成功的操作数。 | Integer |是    |
-| TotalNumberOfTasks     | ProgressSummary | 总操作数。         | Integer |是    |
+| 节点名                 | 父节点          | 描述               | 类型    |
+| ---------------------- | --------------- | ------------------ | ------- |
+| NumberOfTasksFailed    | ProgressSummary | 当前失败的操作数。 | Integer |
+| NumberOfTasksSucceeded | ProgressSummary | 当前成功的操作数。 | Integer |
+| TotalNumberOfTasks     | ProgressSummary | 总操作数。         | Integer |
