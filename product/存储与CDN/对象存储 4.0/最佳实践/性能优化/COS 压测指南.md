@@ -77,6 +77,11 @@ yum install nmap-ncat java curl java-1.8.0-openjdk-devel -y
 |    accesskey、secretkey    |    密钥信息，分别替换为用户的 SecretId  和 SecretKey  |
 |      cprefix         |       存储桶名称，例如 examplebucket            |
 |    csuffix          |      用户的 APPID，需注意 APPID 前面带上符号`-`，例如 -1250000000      |
+|     runtime        |    压测运行时间     |
+|       ratio       |       读和写的比例     |
+|   workers          |  压测线程数       |
+
+
 
 4. 编辑 cosbench-start.sh 文件，在 Java 启动行添加如下参数，关闭 s3 的 md5 校验功能：
 ```plaintext
