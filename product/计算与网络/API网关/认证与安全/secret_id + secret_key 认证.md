@@ -1,4 +1,4 @@
-您可以使用 secret_id 和 secret_key 对您的 API 进行认证管理。secret_id 和 secret_key 成对出现，这里将它们将称为 secret_id/secret_key 对。
+您可以使用 secret_id 和 secret_key 对您的 API 进行认证管理。secret_id 和 secret_key 成对出现，这里将它们称为 secret_id/secret_key 对。
 在使用 secret_id/secret_key 对认证前，您需要先创建一对 secret_id 和 secret_key。
 
 ## 密钥对鉴权 API
@@ -64,4 +64,4 @@ Authorization 中 headers 位置填入的需要是参与计算签名的 header �
 ### 签名内容生成
 排列内容时，请注意 header 名后面跟的冒号和空格，如有遗失也可能导致校验无法通过。SecretId、SecretKey、URL、Host 需要修改为真实信息。 
 
-[常用语言的签名 Demo>>](https://github.com/apigateway-demo)
+>?常用语言的签名 Demo 请参考 [开发者指南-多种语言生成签名](https://cloud.tencent.com/document/product/628/42189)。

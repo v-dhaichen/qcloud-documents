@@ -10,7 +10,10 @@ Spark 框架面向使用 Scala/Java 的 Spark 用户，用户编写 Spark 应用
 整体工作流如下：
 <img src="https://main.qcloudimg.com/raw/cc3b3d871a4fd1e5eeac3da1a23f04a6.png" style="zoom:50%;" />
 
+>!您可以按需自行配置资源参数，不同资源实例类型对应的价格不同。选择资源时，您可以参看资源参数右上角的**计费说明**。
+
 ## 详细流程
+
 #### 一、本地准备
 1. 下载代码
 本案例使用的计算圆周率代码来自 Spark 官方：[利用 Spark 框架计算圆周率](https://github.com/apache/spark/blob/master/examples/src/main/scala/org/apache/spark/examples/SparkPi.scala)，您也可通过链接下载，或直接拷贝以下代码到本地进行编译。
@@ -65,7 +68,7 @@ object SparkPi {
 由于智能钛机器学习平台内置的 Spark 版本是2.4，所以用户在本地打包时请引入 Spark 2.4 相关的依赖。您可以选择 sbt 或者 maven 作为打包工具，并将打包后的 jar 包命名为 pi-1.0.jar 。您也可以直接下载我们打包好的 [jar 包](https://csy-classification-1256633383.cos.ap-shanghai.myqcloud.com/pi-1.0.jar) 进行以下步骤的使用体验。
 
 #### 二、利用 Spark 框架完成圆周率计算
-1. 在智能钛控制台的左侧导航栏，选择【框架】>【机器学习】>【Spark】，并拖入画布中。
+1. 在 [智能钛机器学习平台控制台](https://console.cloud.tencent.com/tione/project/list) 的左侧导航栏，选择【框架】>【机器学习】>【Spark】，并拖入画布中。
 2. 配置组件参数
 >?Spark 框架需用户上传自己的 jar 包，PySpark 框架需用户上传 Python 文件。
 
@@ -77,8 +80,8 @@ object SparkPi {
  - 配置文件：此案例中无需配置文件（该参数代表的资源文件在代码中可通过 getResourceAsStream('xxx.txt') 获取）。
 
 3. 配置资源参数（用户可根据自身代码调整分配资源）
- - drver节点资源类型：TI.SMALL2.1core2g
- - executor节点资源类型：TI.SMALL2.1core2g
+ - driver 节点资源类型：您可按需选择
+ - executor节点资源类型：您可按需选择
  - num-executors：1
  - spark-conf：本案例中可不填（spark 的配置参数，例如 spark.shuffle.service.enabled=false，用空格或者回车分割多个 conf）
 4. 运行工作流

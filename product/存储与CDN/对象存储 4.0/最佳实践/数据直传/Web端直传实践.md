@@ -1,7 +1,7 @@
 ## 简介
 本文档介绍如何不依赖 SDK，用简单的代码，在网页（Web 端）直传文件到 COS 的存储桶。
 
->! 本文档内容基于 XML 版本的 API 。
+>! 本文档内容基于 XML 版本的 [API](https://cloud.tencent.com/document/product/436/7751)。
 
 
 ## 前提条件
@@ -20,7 +20,7 @@
 
 ### 获取临时密钥和计算签名
 出于安全考虑，签名使用临时密钥，服务端搭建临时密钥服务，可参考 [PHP 示例](https://github.com/tencentyun/cos-js-sdk-v5/blob/master/server/sts.php)、[Nodejs 示例](https://github.com/tencentyun/cos-js-sdk-v5/blob/master/server/sts.js)。
-如有其他语言或自行实现可以看以下流程：
+如有其他语言或自行实现可以参考以下流程：
 1. 向服务端获取临时密钥，服务端首先使用固定密钥 SecretId、SecretKey 向 STS 服务获取临时密钥，得到临时密钥 tmpSecretId、tmpSecretKey、sessionToken，详情请参考 [临时密钥生成及使用指引](https://cloud.tencent.com/document/product/436/14048) 或 [cos-sts-sdk](https://github.com/tencentyun/qcloud-cos-sts-sdk) 文档。
 2. 前端通过 tmpSecretId、tmpSecretKey，以及 method、pathname 计算签名，可参考下文使用 [cos-auth.js](https://unpkg.com/cos-js-sdk-v5/demo/common/cos-auth.min.js) 来计算签名，如果业务需要也可以放在后端计算签名。
 3. 如果使用 PutObject 接口上传文件，将计算得到的签名和 sessionToken，分别放到发请求时 header 的 authorization 和 x-cos-security-token 字段里。
@@ -197,6 +197,8 @@ Form 表单上传支持低版本的浏览器的上传（如 IE8），当前方�
     <input id="Signature" name="Signature" type="hidden" value="">
     <input name="Content-Type" type="hidden" value="">
     <input id="x-cos-security-token" name="x-cos-security-token" type="hidden" value="">
+
+    <!-- file 字段放在表单最后，避免文件内容过长影响签名判断和鉴权 -->
     <input id="fileSelector" name="file" type="file">
     <input id="submitBtn" type="button" value="提交">
 </form>

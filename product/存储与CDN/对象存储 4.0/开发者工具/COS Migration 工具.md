@@ -139,7 +139,7 @@ ignoreModifiedTimeLessThanSeconds=
 
 | 配置项 | 描述 |
 | ------| ------ |
-|localPath|本地路径，要求格式为绝对路径：<br><li>Linux 下分隔符为单斜杠，例如`/a/b/c` <br><li>Windows 下分隔符为两个反斜杠，例如`E:\\a\\b\\c`|
+|localPath|本地目录，要求格式为绝对路径：<br><li>Linux 下分隔符为单斜杠，例如`/a/b/c` <br><li>Windows 下分隔符为两个反斜杠，例如`E:\\a\\b\\c`|
 |excludes| 要排除的目录或者文件的绝对路径，表示将 localPath 下面某些目录或者文件不进行迁移，多个绝对路径之前用分号分割，不填表示 localPath 下面的全部迁移|
 |ignoreModifiedTimeLessThanSeconds| 排除更新时间与当前时间相差不足一定时间段的文件，单位为秒，默认不设置，表示不根据 lastmodified 时间进行筛选，适用于客户在更新文件的同时又在运行迁移工具，并要求不把正在更新的文件迁移上传到 COS，例如设置为300，表示只上传更新了5分钟以上的文件|
 
@@ -234,6 +234,8 @@ urllistPath=D:\\folder\\urllist.txt
 **3.3.6 配置 Bucket 相互复制 migrateBucketCopy**
 
 若从 COS 的一个指定 Bucket 迁移至另一个 Bucket，则进行该部分配置，具体配置项及说明如下：
+>!发起迁移的账号，需具备源读权限、目的写权限。
+
 <pre>
 # 从源 Bucket 迁移到目标 Bucket 配置分节
 [migrateBucketCopy]
@@ -301,10 +303,12 @@ sh start_migrate.sh -Dcommon.cosPath=/savepoint0403_10/
 
 ## 迁移机制及流程
 ### 迁移机制原理
+
 COS 迁移工具是有状态的，已经迁移成功的会记录在 db 目录下，以 KV 的形式存储在 leveldb 文件中。每次迁移前对要迁移的路径，先查找下 db 中是否存在， 如果存在，且属性和 db 中存在的一致， 则跳过迁移，否则进行迁移。这里的属性根据迁移类型的不同而不同，对于本地迁移，会判断 mtime。对于其他云存储迁移与 Bucket 复制，会判断源文件的 etag 和长度是否与 db 一致。因此，我们参照 db 中是否有过迁移成功的记录，而不是查找 COS，如果绕过了迁移工具，通过别的方式（如 COSCMD 或者控制台）删除修改了文件，那么运行迁移工具由于不会察觉到这种变化，是不会重新迁移的。
 
 ### 迁移流程步骤
-1. 读取配置文件，根据迁移 type，读取响应的配置分节，并执行参数的检查。
+
+1. 读取配置文件，根据迁移 type，读取相应的配置分节，并执行参数的检查。
 2. 根据指定的迁移类型，扫描对比 db 下对所要迁移文件的标识，判断是否允许上传。
 3. 迁移执行过程中会打印执行结果，其中 inprogress 表示迁移中，skip 表示跳过，fail 表示失败，ok 表示成功， condition_not_match 表示因为表示因不满足迁移条件而跳过的文件（如 lastmodifed 和 excludes）。失败的详细信息可以在 log 的 error 日志中查看。执行过程示意图如下图所示：
  ![](https://main.qcloudimg.com/raw/7561d07ea315c9bacbb228b36d6ad6d6.png)

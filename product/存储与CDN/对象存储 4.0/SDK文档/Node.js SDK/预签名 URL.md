@@ -55,7 +55,7 @@ var Authorization = COS.getAuthorization({
 
 示例一：获取不带签名 Object Url。
 
-[//]: # (.cssg-snippet-get-presign-download-url)
+[//]: # (.cssg-snippet-get-presign-download-url-nosign)
 ```js
 var url = cos.getObjectUrl({
     Bucket: 'examplebucket-1250000000',
@@ -67,7 +67,7 @@ var url = cos.getObjectUrl({
 
 示例二：获取带签名 Object Url。
 
-[//]: # (.cssg-snippet-get-presign-download-url-signed)
+[//]: # (.cssg-snippet-get-presign-download-url)
 ```js
 var url = cos.getObjectUrl({
     Bucket: 'examplebucket-1250000000',
@@ -117,7 +117,7 @@ cos.getObjectUrl({
     Key: '1.jpg',
     Sign: true
 }, function (err, data) {
-    if (!err) return console.log(err);
+    if (err) return console.log(err);
     console.log(data.Url);
     var req = request(data.Url, function (err, response, body) {
         console.log(err || body);
@@ -142,7 +142,7 @@ cos.getObjectUrl({
     Key: '1.jpg',
     Sign: true
 }, function (err, data) {
-    if (!err) return console.log(err);
+    if (err) return console.log(err);
     console.log(data.Url);
     var readStream = fs.createReadStream(__dirname + '/1.jpg');
     var req = request({

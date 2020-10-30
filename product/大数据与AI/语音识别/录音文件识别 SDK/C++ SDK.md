@@ -1,6 +1,6 @@
 ## 接入准备
 ### SDK 获取
-录音文件识别 C++ SDK 以及 Demo 的下载地址：[C++ SDK](https://sdk-1256085166.cos.ap-shanghai.myqcloud.com/c%2B%2B_record_asr_sdk.zip)
+录音文件识别 C++ SDK 以及 Demo 的下载地址：[C++ SDK](https://sdk-1300466766.cos.ap-shanghai.myqcloud.com/record/c%2B%2B_record_asr_sdk.zip)
 
 ### 接入须知
 开发者在调用前请先查看录音文件识别的 [接口说明](https://cloud.tencent.com/document/product/1093/37139)，了解接口的**使用要求**和**使用步骤**。
@@ -89,7 +89,7 @@ SecretKey=Your SecretKey
 ```
 #用户请求参数配置文件：request_parameter.ini
 #引擎类型。
-EngineModelType = 16k_0
+EngineModelType = 16k_zh
 #语音声道数。1：单声道；2：双声道（仅在电话 8k 通用模型下支持）。
 ChannelNum = 1
 #识别结果文本编码方式。0：UTF-8。

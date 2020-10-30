@@ -1,6 +1,6 @@
 ## 功能描述
 
-该接口用于获取媒体文件的信息。
+GenerateMediainfo 接口用于获取媒体文件的信息。
 
 ## 请求
 
@@ -21,7 +21,7 @@ Content-type: application/xml
 
 #### 请求头
 
-此接口仅使用公共请求头部，详情请参见 [公共请求头部](https://cloud.tencent.com/document/product/436/7728) 文档。
+此接口仅使用公共请求头部，详情请参见 [公共请求头部](https://cloud.tencent.com/document/product/460/42865) 文档。
 
 #### 请求体
 
@@ -57,7 +57,7 @@ Container 节点 Input 的内容：
 
 #### 响应头
 
-此接口仅返回公共响应头部，详情请参见 [公共响应头部](https://cloud.tencent.com/document/product/436/7729) 文档。
+此接口仅返回公共响应头部，详情请参见 [公共响应头部](https://cloud.tencent.com/document/product/460/42866) 文档。
 
 #### 响应体
 
@@ -227,7 +227,7 @@ Container 节点 Subtitle 的内容：
 
 #### 错误码
 
-该请求操作无特殊错误信息，常见的错误信息请参见 [错误码](https://cloud.tencent.com/document/product/460/8523) 文档。
+该请求操作无特殊错误信息，常见的错误信息请参见 [错误码](https://cloud.tencent.com/document/product/460/42867) 文档。
 
 ## 实际案例
 
@@ -243,7 +243,7 @@ Content-Type: application/xml
 
 <Request>
   <Input>
-    <Object>/video-for-test.mp4</Object>
+    <Object>video-for-test.mp4</Object>
   </Input>
 </Request>
 ```
@@ -294,7 +294,7 @@ x-ci-request-id: NTg3NzRiMjVfYmRjMzVfMTViMl82ZGZm****
                                 <AvgFps>24/1</AvgFps>
                                 <Bitrate>938.164000</Bitrate>
                                 <CodecLongName>H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10</CodecLongName>
-                                <CodecName>h264</CodecName>
+                                <CodecName>H.264</CodecName>
                                 <CodecTag>0x31637661</CodecTag>
                                 <CodecTagString>avc1</CodecTagString>
                                 <CodecTimeBase>1/12288</CodecTimeBase>

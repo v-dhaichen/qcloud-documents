@@ -90,8 +90,14 @@ EDUSDK_API bool SetTEduBoardLogFilePath(const char *logFilePath)
 ### EnableTEduBoardOffscreenRender
 启用白板离屏渲染 
 ``` C++
-EDUSDK_API bool EnableTEduBoardOffscreenRender()
+EDUSDK_API bool EnableTEduBoardOffscreenRender(uint32_t maxFps = 30)
 ```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| maxFps | uint32_t | 离屏渲染的最大帧率，取值[1, 60]  |
+
 #### 返回
 启用离屏渲染是否成功 
 
@@ -100,18 +106,6 @@ EDUSDK_API bool EnableTEduBoardOffscreenRender()
 
 #### 介绍
 启用离屏渲染时，SDK 不再创建白板 VIEW，而是通过 onTEBOffscreenPaint 回调接口将白板离屏渲染的像素数据抛出 
-
-
-### DisableTEduBoardCrashReport
-禁用白板 Crash 上报 
-``` C++
-EDUSDK_API bool DisableTEduBoardCrashReport()
-```
-#### 返回
-禁用白板 Crash 上报是否成功 
-
-#### 警告
-该接口必须要在第一次调用 CreateTEduBoardController 之前调用才有效，否则将会失败 
 
 
 ### GetTEduBoardRenderProcessHandler
@@ -172,7 +166,7 @@ virtual void Init(const TEduBoardAuthParam &authParam, uint32_t roomId, const TE
 | 参数 | 类型 | 含义 |
 | --- | --- | --- |
 | authParam | const TEduBoardAuthParam & | 授权参数  |
-| roomId | uint32_t | 课堂 ID  |
+| roomId | uint32_t | 课堂 ID，32位整型，取值范围[1, 4294967294]  |
 | initParam | const TEduBoardInitParam & | 可选参数，指定用于初始化白板的一系列属性值  |
 
 #### 警告
@@ -189,6 +183,27 @@ virtual WINDOW_HANDLE GetBoardRenderView()=0
 ```
 #### 返回
 白板渲染 View 
+
+
+### Refresh
+刷新当前页白板，触发 onTEBRefresh 回调 
+``` C++
+virtual void Refresh()=0
+```
+#### 警告
+如果当前白板包含 PPT/H5/图片/视频时，刷新白板将会触发对应的回调 
+
+
+### SyncAndReload
+同步本地发送失败的数据到远端并刷新本地数据 
+``` C++
+virtual void SyncAndReload()=0
+```
+#### 警告
+Reload 等同于重新加载历史数据，会触发白板初始化时除 onTEBInit 之外的所有回调。 
+
+#### 介绍
+接口用途：此接口主要用于网络恢复后，同步本地数据到远端，拉取远端数据到本地 调用时机：在网络恢复后调用 使用限制：如果历史数据还没有加载完成，则不允许重复调用，否则回调告警 TEDU_BOARD_WARNING_ILLEGAL_OPERATION 
 
 
 ### AddSyncData
@@ -240,7 +255,7 @@ virtual void Reset()=0
 
 
 ### SetBoardRenderViewPos
-设置白板渲染View的位置和大小 
+设置白板渲染 View 的位置和大小 
 ``` C++
 virtual void SetBoardRenderViewPos(int32_t x, int32_t y, uint32_t width, uint32_t height)=0
 ```
@@ -295,6 +310,75 @@ JS 执行后的返回值转换而来的字符串
 
 
 
+## 离屏渲染输入事件相关接口
+
+### SendKeyEvent
+发送键盘事件到白板 
+``` C++
+virtual void SendKeyEvent(const TEduBoardKeyEvent &event)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| event | const TEduBoardKeyEvent & | 要发送的键盘事件  |
+
+
+### SendMouseClickEvent
+发送鼠标点击事件到白板 
+``` C++
+virtual void SendMouseClickEvent(const TEduBoardMouseEvent &event, TEduBoardMouseButtonType type, bool mouseUp, int clickCount)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| event | const TEduBoardMouseEvent & | 要发送的鼠标事件  |
+| type | TEduBoardMouseButtonType | 鼠标按键类型  |
+| mouseUp | bool | 鼠标是否弹起  |
+| clickCount | int | 点击次数  |
+
+
+### SendMouseMoveEvent
+发送鼠标移动事件到白板 
+``` C++
+virtual void SendMouseMoveEvent(const TEduBoardMouseEvent &event, bool mouseLeave)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| event | const TEduBoardMouseEvent & | 要发送的鼠标事件  |
+| mouseLeave | bool | 鼠标是否离开白板  |
+
+
+### SendMouseWheelEvent
+发送鼠标滚轮事件到白板 
+``` C++
+virtual void SendMouseWheelEvent(const TEduBoardMouseEvent &event, int deltaX, int deltaY)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| event | const TEduBoardMouseEvent & | 要发送的鼠标事件  |
+| deltaX | int | 滚轮在 X 方向的移动增量  |
+| deltaY | int | 滚轮在 Y 方向的移动增量  |
+
+
+### SendTouchEvent
+发送触摸事件到白板 
+``` C++
+virtual void SendTouchEvent(const TEduBoardTouchEvent &event)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| event | const TEduBoardTouchEvent & | 要发送的触摸事件  |
+
+
+
 ## 涂鸦相关接口
 
 ### SetDrawEnable
@@ -319,6 +403,30 @@ virtual bool IsDrawEnable()=0
 ```
 #### 返回
 是否允许涂鸦，true 表示白板可以涂鸦，false 表示白板不能涂鸦 
+
+
+### SetHandwritingEnable
+设置白板是否开启笔锋特性 
+``` C++
+virtual void SetHandwritingEnable(bool enable)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| enable | bool | 是否开启笔锋，true 表示开启，false 表示关闭 |
+
+#### 介绍
+白板创建后默认为关闭 
+
+
+### IsHandwritingEnable
+获取白板是否开启笔锋特性 
+``` C++
+virtual bool IsHandwritingEnable()=0
+```
+#### 返回
+是否开启笔锋特性 
 
 
 ### SetAccessibleUsers
@@ -810,7 +918,7 @@ virtual void SetBoardScale(uint32_t scale)=0
 | scale | uint32_t | 要设置的白板缩放比例 |
 
 #### 介绍
-支持范围: [100，300]，实际缩放比为: scale/100 
+支持范围: [100，1600]，实际缩放比为: scale/100 
 
 
 ### GetBoardScale
@@ -844,6 +952,18 @@ virtual TEduBoardContentFitMode GetBoardContentFitMode()=0
 ```
 #### 返回
 白板内容自适应模式 
+
+
+### Snapshot
+白板快照 
+``` C++
+virtual void Snapshot(const TEduBoardSnapshotInfo &info)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| info | const TEduBoardSnapshotInfo & | 快照信息  |
 
 
 
@@ -889,23 +1009,49 @@ virtual void GetFileTranscodeProgress(const char *taskId)=0
 ### AddTranscodeFile
 添加转码文件 
 ``` C++
-virtual const char* AddTranscodeFile(const TEduBoardTranscodeFileResult &result)=0
+virtual const char* AddTranscodeFile(const TEduBoardTranscodeFileResult &result, bool needSwitch=true)=0
 ```
 #### 参数
 
 | 参数 | 类型 | 含义 |
 | --- | --- | --- |
 | result | const TEduBoardTranscodeFileResult & | 文件转码结果  |
+| needSwitch | bool |  |
+
+#### 返回
+文件 ID 
+
+#### 警告
+当传入文件的 URL 重复时，返回 URL 对应的 文件 ID 
+在收到对应的 onTEBAddTranscodeFile 回调前，无法用返回的文件 ID 查询到文件信息 
+
+#### 介绍
+TEduBoardTranscodeFileResult 的字段信息主要来自：
+1. 使用客户端 ApplyFileTranscode 转码，直接将转码结果用于调用此接口
+2. （推荐）使用服务端 REST API 转码，只需传入转码回调结果的四个字段（title，resolution，url，pages），其服务端->客户端字段的对应关系为 Title->title、Resolution->resolution、ResultUrl->url、Pages->pages [转码文档](https://cloud.tencent.com/document/product/1137/40260)
+
+
+### AddImagesFile
+添加图片文件 
+``` C++
+virtual const char* AddImagesFile(const char **urls, uint32_t urlCount)=0
+```
+#### 参数
+
+| 参数 | 类型 | 含义 |
+| --- | --- | --- |
+| urls | const char ** | 要使用的图片 UR L列表，编码格式为 UTF8，不允许为 nullptr  |
+| urlCount | uint32_t | 图片 URL 个数  |
 
 #### 返回
 文件 ID 
 
 #### 警告
 当传入文件的 URL 重复时，文件 ID 返回为空字符串 
-在收到对应的 onTEBAddTranscodeFile 回调前，无法用返回的文件 ID 查询到文件信息 
+在收到对应的 onTEBAddImagesFile 回调前，无法用返回的文件 ID 查询到文件信息 
 
 #### 介绍
-本接口只处理传入参数结构体的 title、resolution、url、pages 字段 调用该接口后，SDK 会在后台进行文件加载，期间用户可正常进行其它操作，加载成功或失败后会触发相应回调 文件加载成功后，将自动切换到该文件 
+文件加载成功后，将自动切换到该文件 
 
 
 ### AddVideoFile
