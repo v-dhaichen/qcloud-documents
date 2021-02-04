@@ -1,10 +1,8 @@
 ## 功能描述
-
-DescribeMediaTemplates 用于搜索水印模板。
+DescribeMediaTemplates 搜索水印模板。
 
 ## 请求
-
-#### 请求示例
+### 请求实例
 
 ```shell
 GET /template HTTP/1.1
@@ -16,14 +14,16 @@ Content-Type: application/xml
 
 ```
 
->? Authorization: Auth String （详情请参见 [请求签名](https://cloud.tencent.com/document/product/436/7778) 文档）。
+> Authorization: Auth String （详情请查阅 [请求签名](https://cloud.tencent.com/document/product/436/7778) 文档）。
 
 
-#### 请求头
+### 请求头
+#### 公共头部
+该请求操作的实现使用公共请求头，了解公共请求头详情请参阅 [公共请求头部](https://cloud.tencent.com/document/product/460/42865) 文档。
+#### 非公共头部
+该请求操作无特殊的请求头部信息。
 
-此接口仅使用公共请求头部，详情请参见 [公共请求头部](https://cloud.tencent.com/document/product/460/42865) 文档。
-
-#### 请求体
+### 请求体
 该请求的请求体为空。
 
 #### 请求参数
@@ -31,20 +31,22 @@ Content-Type: application/xml
 
 |节点名称（关键字）|父节点     |描述                    |   类型    |   必选    |
 |:---           |:--       |:--                    |   :--     |   :--    |
-| tag           | 无        | 模板 Tag：Watermark       | String    |是|
-| ids           | 无        | 模板 ID，以`,`符号分割字符串  | String     |否|
+| tag           | 无        | 模板Tag：Watermark       | String    |是|
+| ids           | 无        | 模板ID, 以,符号分割字符串  | String     |否|
 | name          | 无        | 模板名称前缀              | String     |否|
 | pageNumber    | 无        | 第几页                   | Integer     |否|
 | pageSize      | 无        | 每页个数                 | Integer     |否|
 
 
 ## 响应
+### 响应头
 
-#### 响应头
+#### 公共响应头
+该响应包含公共响应头，了解公共响应头详情请参阅 [公共响应头部]( https://cloud.tencent.com/document/product/460/42866) 文档。
+#### 特有响应头
+该响应无特殊的响应头。
 
-此接口仅返回公共响应头部，详情请参见 [公共响应头部]( https://cloud.tencent.com/document/product/460/42866) 文档。
-
-#### 响应体
+### 响应体
 该响应体返回为 **application/xml** 数据，包含完整节点数据的内容展示如下：
 
 ``` shell
@@ -89,17 +91,17 @@ Container 节点 Response 的内容：
 
 | 节点名称（关键字） | 父节点   | 描述                           | 类型      |
 | :----------------- | :------- | :----------------------------- | :-------- |
-| RequestId          | Response | 请求的唯一 ID                   | String    |
+| RequestId          | Response | 请求的唯一ID                   | String    |
 | TotalCount         | Response | 模版总数                       | Int       |
-| PageNumber         | Response | 当前页数，同请求中的 pageNumber | Int       |
-| PageSize           | Response | 每页个数，同请求中的 pageSize   | Int       |
+| PageNumber         | Response | 当前页数，同请求中的pageNumber | Int       |
+| PageSize           | Response | 每页个数，同请求中的pageSize   | Int       |
 | TemplateList       | Response | 模版数组                       | Container |
 
 Container节点TemplateList的内容：
 
 | 节点名称（关键字） | 父节点                | 描述                                                         | 类型      |
 | :----------------- | :-------------------- | :----------------------------------------------------------- | :-------- |
-| TemplateId         | Response.TemplateList | 模版 ID                                                      | String    |
+| TemplateId         | Response.TemplateList | 模版ID                                                      | String    |
 | Name               | Response.TemplateList | 模版名字                                                     | String    |
 | BucketId           | Response.TemplateList | 模版所属存储桶                                                | String    |
 | Category           | Response.TemplateList | 模版属性，Custom                                             | String    |
@@ -113,56 +115,57 @@ Container 类型 Watermark 的具体数据描述如下：
 
 | 节点名称（关键字）     | 父节点  | 描述                                                     | 类型      | 必选 | 默认值       | 限制  |
 | ------------------  | ------- | -------------------------------------------------------- | --------- | ---- |---| ---- |
-| Type                | Response.TemplateList.<br/>Watermark | 水印类型    | String    | 是   | 无  | <li>Text：文字水印<li>Image：图片水印 |
-| Pos                 | Response.TemplateList.<br/>Watermark | 基准位置    | String    | 是   | 无  | <li>TopRight：右上<li>TopLeft：左上<li>BottomRight：右下<li>BottomLeft：左下 |
-| LocMode             | Response.TemplateList.<br/>Watermark | 偏移方式    | String    | 是   | 无  | <li>Relativity：按比例<li>Absolute：固定位置 |
-| Dx                  | Response.TemplateList.<br/>Watermark | 水平偏移    | String    | 是   | 无  | <li>值范围：[0 100] <br/><li>当 locMode 为 Relativity 时，单位为% <br/> <li>当 locMode 为 Absolute 时，单位为px |
-| Dy                  | Response.TemplateList.<br/>Watermark | 垂直偏移    | String    | 是   | 无  | <li>值范围：[0 100] <br/><li>当 locMode 为 Relativity 时，单位为% <br/><li>当 locMode 为 Absolute 时，单位为px |
-| StartTime           | Response.TemplateList.<br/>Watermark | 水印开始时间 | String    | 否   | 0   | <li>[0 视频时长] <br/><li>单位为秒 <br/><li>支持 float 格式，执行精度精确到毫秒 |
-| EndTime             | Response.TemplateList.<br/>Watermark | 水印结束时间 | String    | 否   | 视频结束时间  | <li>[0 视频时长] <br/><li>单位为秒 <br/><li>支持 float 格式，执行精度精确到毫秒 |
-| Image               | Response.TemplateList.<br/>Watermark | 图片水印节点 | Container    | 否   | 无  | 无 |
-| Text                | Response.TemplateList.<br/>Watermark | 文本水印节点 | Container    | 否   | 无  | 无 |
+| Type                | Response.TemplateList.Watermark | 水印类型    | String    | 是   | 无  | 1. Text: 文字水印、 Image: 图片水印 |
+| Pos                 | Response.TemplateList.Watermark | 基准位置    | String    | 是   | 无  | 1. TopRight、TopLeft、BottomRight、 BottomLeft |
+| LocMode             | Response.TemplateList.Watermark | 偏移方式    | String    | 是   | 无  | 1. Relativity: 按比例、 Absolute: 固定位置 |
+| Dx                  | Response.TemplateList.Watermark | 水平偏移    | String    | 是   | 无  |1. 在图片水印中，如果Background为true，当locMode为Relativity时，为% 取值范围[-300 0]；当locMode为Absolute时，为px 值范围：[-4096 0] <br/> 2. 在图片水印中，如果Background为false，当locMode为Relativity时，为% 取值范围[0 100]；当locMode为Absolute时，为px 值范围：[0 4096]<br/>3. 在文字水印中，当locMode为Relativity时，为% 取值范围[0 100]；当locMode为Absolute时，为px 值范围：[0 4096] |
+| Dy                  | Response.TemplateList.Watermark | 垂直偏移    | String    | 是   | 无  |1. 在图片水印中，如果Background为true，当locMode为Relativity时，为% 取值范围[-300 0]；当locMode为Absolute时，为px 值范围：[-4096 0] <br/> 2. 在图片水印中，如果Background为false，当locMode为Relativity时，为% 取值范围[0 100]；当locMode为Absolute时，为px 值范围：[0 4096]<br/>3. 在文字水印中，当locMode为Relativity时，为% 取值范围[0 100]；当locMode为Absolute时，为px 值范围：[0 4096] |
+| StartTime           | Response.TemplateList.Watermark | 水印开始时间 | String    | 否   | 0   | 1. [0 视频时长] <br/> 2. 单位为秒 <br/> 3. 支持float格式，执行精度精确到毫秒 |
+| EndTime             | Response.TemplateList.Watermark | 水印结束时间 | String    | 否   | 视频结束时间  | 1. [0 视频时长] <br/> 2. 单位为秒 <br/> 3. 支持float格式，执行精度精确到毫秒 |
+| Image               | Response.TemplateList.Watermark | 图片水印节点 | Container    | 否   | 无  | 无 |
+| Text                | Response.TemplateList.Watermark | 文本水印节点 | Container    | 否   | 无  | 无 |
 
 
 Container 类型 Image 的具体数据描述如下：
 
 | 节点名称（关键字）     | 父节点  | 描述                                                     | 类型      | 必选 | 默认值       | 限制  |
 | ------------------  | ------- | -------------------------------------------------------- | --------- | ---- |---| ---- |
-| Url                 | Response.TemplateList.<br/>Watermark.Image | 水印图地址   | String    | 是   | 无  | <li>水印图片地址 <br/><li>如果水印图片为私有对象时，请携带签名信息 |
-| Mode                 | Response.TemplateList.<br/>Watermark.Image | 尺寸模式    | String    | 是   | 无   | <li>Original：原有尺寸 <br/><li>Proportion：按比例 <br/><li>Fixed：固定大小 |
-| Width                | Response.TemplateList.<br/>Watermark.Image | 宽         | String    | 否   | 无   | <li>当 Mode 为 Original，水印图宽 <br/><li>当 Mode 为 Proportion，单位为%，值范围：[0 100]<br/><li>当 Mode 为 Fixed，单位为px，值范围：[128，4096]，若只设置 Width 时，按照视频原始比例计算 Height<br/> |
-| Height               | Response.TemplateList.<br/>Watermark.Image | 高         | String    | 否   | 无   | <li>当 Mode 为 Original，水印图高 <br/><li>当 Mode 为 Proportion，单位为%，值范围：[0 100]<br/><li>当 Mode 为 Fixed，单位为px，值范围：[128，4096]，若只设置 Height 时，按照视频原始比例计算 Width<br/>|
-| Transparency         | Response.TemplateList.<br/>Watermark.Image | 透明度      | String    | 是   | 无   | 值范围：[0 100]，单位% |
+| Url                 | Response.TemplateList.Watermark.Image | 水印图地址   | String    | 是   | 无  | 1. 水印图片地址 <br/> 2. 如果水印图片为私有对象时，请携带签名信息 |
+| Mode                 | Response.TemplateList.Watermark.Image | 尺寸模式    | String    | 是   | 无   | 1. Original: 原有尺寸 <br/>  2. Proportion: 按比例 <br/> 3. Fixed: 固定大小 |
+| Width                | Response.TemplateList.Watermark.Image | 宽         | String    | 否   | 无   | 1. 当Mode为Original，水印图宽 <br/> 2. 当mode为Proportion，单位为%，背景图：[100 300]；前景图：[1 100]<br/> 3.当mode为Fixed，单位为px，值范围：[8，4096]，若只设置Width时，按照视频原始比例计算Height<br/> |
+| Height               | Response.TemplateList.Watermark.Image | 高         | String    | 否   | 无   | 1. 当Mode为Original，水印图高 <br/> 2. 当mode为Proportion，单位为%，背景图：[100 300]；前景图：[1 100]<br/> 3.当mode为Fixed，单位为px，值范围：[8，4096]，若只设置Height时，按照视频原始比例计算Width<br/>|
+| Transparency         | Response.TemplateList.Watermark.Image | 透明度      | String    | 是   | 无   | 1. 值范围：[0 100]，单位% |
+| Background           | Request.Watermark.Image | 是否背景图   | String    | 否   | false   | 1. true、false |
 
 
 Container 类型 Text 的具体数据描述如下：
 
 | 节点名称（关键字）     | 父节点  | 描述                                                     | 类型      | 必选 | 默认值       | 限制  |
 | ------------------  | ------- | -------------------------------------------------------- | --------- | ---- |---| ---- |
-| FontSize            | Response.TemplateList.<br/>Watermark.Text | 字体大小    | String    | 是   | 无  | 值范围：[0 100]，单位px |
-| FontType            | Response.TemplateList.<br/>Watermark.Text | 字体类型    | String    | 是   | 无  | 参考下表  |
-| FontColor           | Response.TemplateList.<br/>Watermark.Text | 字体颜色    | String    | 是   | 无  | 格式：0xRRGGBB |
-| Transparency        | Response.TemplateList.<br/>Watermark.Text | 透明度      | String    | 是   | 无  | 值范围：[0 100]，单位%|
-| Text                | Response.TemplateList.<br/>Watermark.Text | 水印内容    | String    | 是   | 无  | 长度不超过64个字符，仅支持中文、英文、数字、_、-和*|
+| FontSize            | Response.TemplateList.Watermark.Text | 字体大小    | String    | 是   | 无  | 1. 值范围：[0 100]，单位px |
+| FontType            | Response.TemplateList.Watermark.Text | 字体类型    | String    | 是   | 无  | 1.  |
+| FontColor           | Response.TemplateList.Watermark.Text | 字体颜色    | String    | 是   | 无  | 1. 格式：0xRRGGBB |
+| Transparency        | Response.TemplateList.Watermark.Text | 透明度      | String    | 是   | 无  | 1. 值范围：[0 100]，单位%|
+| Text                | Response.TemplateList.Watermark.Text | 水印内容    | String    | 是   | 无  | 1. 长度不超过64个字符，仅支持中文、英文、数字、_、-和*|
 
-#### 错误码
+### 错误码
 
-该请求操作无特殊错误信息，常见的错误信息请参见 [错误码](https://cloud.tencent.com/document/product/460/42867) 文档。
+该请求无特有错误信息，常见的错误信息请参阅 [错误码](https://cloud.tencent.com/document/product/460/42867) 文档。
 
 ## 实际案例
 
-#### 请求
+### 请求
 
 ```shell
 GET /template?ids=A,B,C HTTP/1.1
-Authorization:q-sign-algorithm=sha1&q-ak=AKIDZfbOAo7cllgPvF9cXFrJD0a1ICvR****&q-sign-time=1497530202;1497610202&q-key-time=1497530202;1497610202&q-header-list=&q-url-param-list=&q-signature=28e9a4986df11bed0255e97ff90500557e0ea057
+Authorization:q-sign-algorithm=sha1&q-ak=AKIDZfbOAo7cllgPvF9cXFrJD0**********&q-sign-time=1497530202;1497610202&q-key-time=1497530202;1497610202&q-header-list=&q-url-param-list=&q-signature=28e9a4986df11bed0255e97ff90500557e0ea057
 Host:bucket-1250000000.ci.ap-beijing.myqcloud.com
 Content-Length: 0
 Content-Type: application/xml
 
 ```
 
-#### 响应
+### 响应
 
 ```shell
 HTTP/1.1 200 OK
@@ -171,10 +174,10 @@ Content-Length: 100
 Connection: keep-alive
 Date: Thu, 15 Jun 2017 12:37:29 GMT
 Server: tencent-ci
-x-ci-request-id: NTk0MjdmODlfMjQ4OGY3XzYzYzh****=
+x-ci-request-id: NTk0MjdmODlfMjQ4OGY3XzYzYzhfMjc=
 
 <Response>
-    <RequestId>NTk0MjdmODlfMjQ4OGY3XzYzYzh****=</RequestId>
+    <RequestId>NTk0MjdmODlfMjQ4OGY3XzYzYzhfMjc=</RequestId>
     <TotalCount>1</TotalCount>
     <PageNumber>1</PageNumber>
     <PageSize>10</PageSize>
@@ -208,18 +211,18 @@ x-ci-request-id: NTk0MjdmODlfMjQ4OGY3XzYzYzh****=
 </Response>
 ```
 
-#### 请求
+### 请求
 
 ```shell
-GET /template?page_size=10&page_number=1 HTTP/1.1
-Authorization:q-sign-algorithm=sha1&q-ak=AKIDZfbOAo7cllgPvF9cXFrJD0a1ICvR****&q-sign-time=1497530202;1497610202&q-key-time=1497530202;1497610202&q-header-list=&q-url-param-list=&q-signature=28e9a4986df11bed0255e97ff90500557e0ea057
+GET /template?pageSize=10&pageNumber=1 HTTP/1.1
+Authorization:q-sign-algorithm=sha1&q-ak=AKIDZfbOAo7cllgPvF9cXFrJD0**********&q-sign-time=1497530202;1497610202&q-key-time=1497530202;1497610202&q-header-list=&q-url-param-list=&q-signature=28e9a4986df11bed0255e97ff90500557e0ea057
 Host:bucket-1250000000.ci.ap-beijing.myqcloud.com
 Content-Length: 0
 Content-Type: application/xml
 
 ```
 
-#### 响应
+### 响应
 
 ```shell
 HTTP/1.1 200 OK
@@ -228,10 +231,10 @@ Content-Length: 100
 Connection: keep-alive
 Date: Thu, 15 Jun 2017 12:37:29 GMT
 Server: tencent-ci
-x-ci-request-id: NTk0MjdmODlfMjQ4OGY3XzYzYzh****=
+x-ci-request-id: NTk0MjdmODlfMjQ4OGY3XzYzYzhfMjc=
 
 <Response>
-    <RequestId>NTk0MjdmODlfMjQ4OGY3XzYzYzh****=</RequestId>
+    <RequestId>NTk0MjdmODlfMjQ4OGY3XzYzYzhfMjc=</RequestId>
     <TotalCount>1</TotalCount>
     <PageNumber>1</PageNumber>
     <PageSize>10</PageSize>
