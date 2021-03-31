@@ -138,12 +138,11 @@ sudo dpkg -i cosfs_1.0.19-ubuntu16.04_amd64.deb
 ```
 
 
-
 #### CentOS 系统
 
 1. 安装依赖
 ```shell
-sudo yum install   libxml2-devel libcurl-devel -y
+sudo yum install  libxml2-devel libcurl-devel -y
 ```
 2. 下载最新版本 COSFS
 ```shell
