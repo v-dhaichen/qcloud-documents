@@ -13,7 +13,7 @@
 >? 实际使用当中，需将代码中的注释去掉。
 >
 
-```
+```plaintext
 {
     "bucket": "bucket-1250000000",    // 最终投递 ZIP 文件的存储桶
     "region": "ap-guangzhou",         // 最终投递 ZIP 文件的存储桶所在地域
@@ -66,7 +66,7 @@
 
 ## 函数响应结果示例
 
-```
+```plaintext
 {
   code: 0,
   data: {
@@ -95,7 +95,7 @@
 
 #### 参数配置
 
-```
+```plaintext
 {
     “bucket”: “bucket-1250000000”,
     ”region“: “ap-guangzhou”,
@@ -117,7 +117,7 @@
 
 #### 最终 ZIP 压缩包结构
 
-```
+```plaintext
 mypack.zip
     ├── dir1/file1.jpg
     ├── dir2/file2.mp4
@@ -129,7 +129,7 @@ mypack.zip
 #### 参数配置
 
 
-```
+```plaintext
 {
     “bucket”: “bucket-1250000000”,
     ”region“: “ap-guangzhou”,
@@ -151,7 +151,7 @@ mypack.zip
 
 #### 最终 ZIP 压缩包结构
 
-```
+```plaintext
 mypack.zip
     ├── file1.jpg
     ├── file2.mp4
@@ -163,7 +163,7 @@ mypack.zip
 
 #### 参数配置
 
-```
+```plaintext
 {
     
     “bucket”: “bucket-1250000000”,
@@ -190,7 +190,7 @@ mypack.zip
 
 #### 最终 ZIP 压缩包结构
 
-```
+```plaintext
 mypack.zip
     ├── dir1_rename/file1.jpg
     ├── file2.mp4
@@ -201,7 +201,7 @@ mypack.zip
 
 #### 参数配置
 
-```
+```plaintext
 {
     “bucket”: “bucket-1250000000”,
     ”region“: “ap-guangzhou”,
@@ -225,9 +225,10 @@ mypack.zip
 
 #### 最终 ZIP 压缩包结构
 
-```
+```plaintext
 mypack.zip
     ├── file1.jpg
     ├── file2.mp4
     └── dir3/file3.md
 ```
+
